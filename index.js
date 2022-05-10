@@ -1460,5 +1460,5 @@ const server = new ApolloServer({
 
 // Start the server at port 8080
 server
-  .listen({ port: 8080 })
+  .listen({ port:process.env.PORT|| 8080 })
   .then(({ url }) => console.log(`GraphQL server running at ${url}`));
