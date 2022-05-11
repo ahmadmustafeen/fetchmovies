@@ -74,8 +74,8 @@ const resolvers = {
 }
 
 
-//  PERSONAL NOTE:
-//do not touch this, as this is being hanled by resolvers and typeDefs
+
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
