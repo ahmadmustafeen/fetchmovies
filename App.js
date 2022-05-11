@@ -2,13 +2,18 @@ const express = require("express");
 const mongoose = require("mongoose");
 const ApolloServer = require("apollo-server").ApolloServer;
 const bodyParser = require("body-parser");
-const cors = require("cors");
-const {Users} = require("./models/userSchema");
 const { gql } = require("apollo-server-express");
+const cors = require("cors");
+
+const {Users} = require("./models/userSchema");
+
+
+
 const url =
   "mongodb+srv://ahmad:ahmadahmad@cluster0.bfizc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const connect = mongoose.connect(url, { useNewUrlParser: true });
-connect.then(
+  const connect = mongoose.connect(url, { useNewUrlParser: true });
+
+  connect.then(
   (db) => {
     console.log("Connected correctly to server!");
   },
@@ -38,7 +43,10 @@ type FetchUsers {
 }
 type Query {
     FetchUsers(title: String): [User]
-  }
+}
+type Mutation {
+    CreateUser(firstName: String, lastName: String, age: Int, cnic: String, address: String, phone: String, email: String, password: String): User
+}
 
 `
 const resolvers = {
@@ -47,9 +55,27 @@ const resolvers = {
             const users = await Users.find();
             return users;
         }
+    },
+    Mutation: {
+        CreateUser: async (parent, quote) => {
+            const user = Users()
+            user.firstName = quote.firstName
+            user.lastName = quote.lastName
+            user.age = quote.age
+            user.cnic = quote.cnic
+            user.address = quote.address
+            user.phone = quote.phone
+            user.email = quote.email
+            user.password = quote.password
+            await user.save()
+            return quote
+        }
     }
 }
 
+
+//  PERSONAL NOTE:
+//do not touch this, as this is being hanled by resolvers and typeDefs
 const server = new ApolloServer({
     typeDefs,
     resolvers,
