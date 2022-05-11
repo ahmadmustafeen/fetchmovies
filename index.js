@@ -26,7 +26,7 @@ const typeDefs = gql`
   type Query {
     hello: String!
     randomNumber: Int!
-    queryMovies: [Movies]
+    queryMovies(title:String): [Movies]
   }
 `;
 // the Query type outlines all the queries that can be called by the client
@@ -1445,7 +1445,14 @@ const resolvers = {
   Query: {
     // When the hello query is invoked "Hello world" should be returned
     hello: () => "Hello world!",
-    queryMovies: () => movies,
+    // queryMovies: () => movies,
+    queryMovies(parent, args, context, info) {
+      if(args.title){
+        return movies.filter(movie => movie.title === args.title);
+      }
+      return movies;
+    },
+    
     // When we call the randomNumber query, it should return a number between 0 and 10
     randomNumber: () => Math.round(Math.random() * 10),
   },
